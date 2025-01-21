@@ -1,44 +1,38 @@
-<script setup>
-defineProps({
+<script>
+/*defineProps({
   msg: {
     type: String,
     required: true,
   },
-})
+})*/
+export default {
+  data() {
+    return {
+      likes: 0,
+      dislikes: 5,
+    }
+  },
+  methods: {
+    addLike() {
+      this.likes += 1;
+    },
+    addDislike() {
+      this.dislikes += 1;
+    }
+  }
+}
 </script>
 
 <template>
   <div class="greetings">
-    <h1 class="green">{{ msg }}</h1>
-    <h3>
-      You’ve successfully created a project with
-      <a href="https://vite.dev/" target="_blank" rel="noopener">Vite</a> +
-      <a href="https://vuejs.org/" target="_blank" rel="noopener">Vue 3</a>.
-    </h3>
+<!--    <h1 class="green">{{ msg }}</h1>-->
+    <h1 class="green">It`s work!</h1>
+    <button @click="addLike" class="btn btn-outline-primary"> Like </button>
+    <button @click="addDislike" class="btn btn-outline-secondary ms-3"> Dislike </button>
+    <div> Likes: <strong>{{ likes }}</strong></div>
+    <div> Dislikes: <strong>{{ dislikes }}</strong></div>
   </div>
 </template>
 
 <style scoped>
-h1 {
-  font-weight: 500;
-  font-size: 2.6rem;
-  position: relative;
-  top: -10px;
-}
-
-h3 {
-  font-size: 1.2rem;
-}
-
-.greetings h1,
-.greetings h3 {
-  text-align: center;
-}
-
-@media (min-width: 1024px) {
-  .greetings h1,
-  .greetings h3 {
-    text-align: left;
-  }
-}
 </style>
