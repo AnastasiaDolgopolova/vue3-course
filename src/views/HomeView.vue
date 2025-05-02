@@ -1,9 +1,9 @@
 <script setup>
-import Posts from '../components/Posts.vue'
+//import PostList from '../components/PostList.vue'
 </script>
 
 <template>
   <main>
-    <Posts />
+<!--    <PostList/>-->
   </main>
 </template>
