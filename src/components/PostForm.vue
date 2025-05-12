@@ -1,13 +1,15 @@
 <template>
   <form @submit.prevent>
     <h4>Add Post</h4>
-    <my-input v-model="post.title"
-           type="text"
-           placeholder="Title"
+    <my-input
+        v-model="post.title"
+        type="text"
+        placeholder="Title"
     ></my-input>
-    <my-input v-model="post.description"
-           type="text"
-           placeholder="Description"
+    <my-input
+        v-model="post.description"
+        type="text"
+        placeholder="Description"
     ></my-input>
     <my-button
         class="btn"
