@@ -10,7 +10,7 @@
       </nav>
     </div>
     <div>
-      <post-form/>
+      <post-form @create="createPost"/>
       <post-list :posts="posts"/>
     </div>
   </div>
@@ -35,21 +35,12 @@ export default {
         {id: 1, title: 'Post about PHP', description: 'PHP general purpose backend programming language'},
         {id: 1, title: 'Post about Laravel', description: 'Laravel general purpose programming framework'},
       ],
-      title: '',
-      description: '',
     }
   },
   methods: {
-    createPost() {
-      const newPost = {
-        id: Date.now(),
-        title: this.title,
-        description: this.description
-      }
-
-      this.posts.push(newPost);
-      this.title = '';
-      this.description = '';
+    createPost(post) {
+      //console.log(post);
+      this.posts.push(post);
     },
   }
 }
