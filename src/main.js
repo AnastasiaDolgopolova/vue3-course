@@ -5,7 +5,7 @@ import App from './App.vue'
 import router from './router'
 import components from '@/components/UI';
 
-console.log(components);
+//console.log(components);
 
 const app = createApp(App)
 

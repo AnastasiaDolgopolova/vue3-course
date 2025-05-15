@@ -11,9 +11,12 @@
     </div>
     <div>
       <h1>Posts Page</h1>
+<!--      <input type="text" v-model.trim="modificatorValue">-->
+<!--      <my-button class="btn" @click="fetchPosts"> Get Posts </my-button>-->
       <my-button
           class="btn"
           @click="showDialog"
+          style="margin: 15px 0;"
       >
         Add Post
       </my-button>
@@ -21,9 +24,11 @@
         <post-form @create="createPost"/>
       </my-dialog>
       <post-list
+          v-if="!isPostsLoading"
           :posts="posts"
           @remove="removePost"
       />
+      <div v-else> Posts Loading </div>
     </div>
   </div>
 
@@ -37,6 +42,7 @@ import  PostList from "@/components/PostList.vue";
 import  PostForm from "@/components/PostForm.vue";
 import MyDialog from "@/components/UI/MyDialog.vue";
 import MyButton from "@/components/UI/MyButton.vue";
+import axios from "axios";
 
 export default {
   components: {
@@ -46,12 +52,10 @@ export default {
   },
   data() {
     return {
-      posts: [
-        {id: 1, title: 'Post about JS', description: 'JavaScript general purpose programming language'},
-        {id: 2, title: 'Post about PHP', description: 'PHP general purpose backend programming language'},
-        {id: 3, title: 'Post about Laravel', description: 'Laravel general purpose programming framework'},
-      ],
+      posts: [],
       dialogVisible: false,
+      isPostsLoading: false,
+     // modificatorValue: "",
     }
   },
   methods: {
@@ -66,7 +70,29 @@ export default {
     },
     showDialog() {
       this.dialogVisible = true;
+    },
+    async fetchPosts() {
+      try {
+        this.isPostsLoading = true;
+        console.log(1,this.isPostsLoading);
+        setTimeout(async () => {
+          const response = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10');
+          this.posts = response.data;
+          this.isPostsLoading = false;
+          console.log(2,this.isPostsLoading);
+        }, 5000);
+       // console.log(response);
+      } catch (e) {
+        alert(e)
+      } finally {
+      //  this.isPostsLoading = false;
+       // console.log(2,this.isPostsLoading);
+      }
+      //https://jsonplaceholder.typicode.com/posts?_limit=10
     }
+  },
+  mounted() {
+    this.fetchPosts();
   }
 }
 </script>

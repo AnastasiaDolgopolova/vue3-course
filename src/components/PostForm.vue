@@ -7,9 +7,9 @@
         placeholder="Title"
     ></my-input>
     <my-input
-        v-model="post.description"
+        v-model="post.body"
         type="text"
-        placeholder="Description"
+        placeholder="Body"
     ></my-input>
     <my-button
         class="btn"
@@ -27,7 +27,7 @@ export default {
     return {
       post: {
         title: '',
-        description: ''
+        body: ''
       }
     }
   },
@@ -38,7 +38,7 @@ export default {
 
       this.post = {
         title: '',
-        description: ''
+        body: ''
       }
 
     },
