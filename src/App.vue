@@ -11,6 +11,10 @@
     </div>
     <div>
       <h1>Posts Page</h1>
+      <my-input
+          v-model="searchQuery"
+          placeholder="Search ..."
+      />
 <!--      <input type="text" v-model.trim="modificatorValue">-->
 <!--      <my-button class="btn" @click="fetchPosts"> Get Posts </my-button>-->
       <div class="app__btns">
@@ -30,11 +34,13 @@
         <post-form @create="createPost"/>
       </my-dialog>
       <post-list
-          :posts="sortedPosts"
+          :posts="sortedAndSearchedPosts"
           @remove="removePost"
           v-if="!isPostsLoading"
       />
       <div v-else> Posts Loading </div>
+
+      <my-pagination v-model="page" :total-pages="totalPages" />
     </div>
   </div>
 
@@ -50,9 +56,13 @@ import MyDialog from "@/components/UI/MyDialog.vue";
 import MyButton from "@/components/UI/MyButton.vue";
 import axios from "axios";
 import MySelect from "@/components/UI/MySelect.vue";
+import MyInput from "@/components/UI/MyInput.vue";
+import MyPagination from "@/components/UI/MyPagination.vue";
 
 export default {
   components: {
+    MyPagination,
+    MyInput,
     MySelect,
     MyButton,
     MyDialog,
@@ -64,6 +74,10 @@ export default {
       dialogVisible: false,
       isPostsLoading: false,
       selectedSort: '',
+      searchQuery: '',
+      page: 1,
+      limit: 10,
+      totalPages: 0,
       sortOptions: [
         { value: 'id', name: 'By Id'},
         { value: 'title', name: 'By Title'},
@@ -90,7 +104,13 @@ export default {
         this.isPostsLoading = true;
         console.log(1,this.isPostsLoading);
       //  setTimeout(async () => {
-          const response = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10');
+          const response = await axios.get('https://jsonplaceholder.typicode.com/posts', {
+            params: {
+              _page: this.page,
+              _limit: this.limit
+            }
+          });
+          this.totalPages = Math.ceil(response.headers['x-total-count'] / this.limit);
           this.posts = response.data;
         //  this.isPostsLoading = false;
         //  console.log(2,this.isPostsLoading);
@@ -126,9 +146,15 @@ export default {
 
         return 0; // fallback
       });
+    },
+    sortedAndSearchedPosts() {
+      return this.sortedPosts.filter(post => post.title.toLowerCase().includes(this.searchQuery.toLowerCase()));
     }
   },
   watch: {
+    page() {
+      this.fetchPosts();
+    }
     /*selectedSort(newValue) {
       this.posts.sort((post1, post2) => {
         return post1[newValue]?.localeCompare(post2[newValue])
@@ -146,10 +172,6 @@ export default {
 }
 
 .main {
-  padding: 20px;
-}
-
-.app {
   padding: 20px;
 }
 
