@@ -40,7 +40,9 @@
       />
       <div v-else> Posts Loading </div>
 
-      <my-pagination v-model="page" :total-pages="totalPages" />
+      <div ref="observer" class="observer"></div>
+
+<!--      <my-pagination v-model="page" :total-pages="totalPages" />-->
     </div>
   </div>
 
@@ -102,7 +104,6 @@ export default {
     async fetchPosts() {
       try {
         this.isPostsLoading = true;
-        console.log(1,this.isPostsLoading);
       //  setTimeout(async () => {
           const response = await axios.get('https://jsonplaceholder.typicode.com/posts', {
             params: {
@@ -120,13 +121,43 @@ export default {
         alert(e)
       } finally {
         this.isPostsLoading = false;
-        console.log(2,this.isPostsLoading);
       }
       //https://jsonplaceholder.typicode.com/posts?_limit=10
+    },
+
+    async loadMorePosts() {
+      try {
+        this.page += 1;
+        console.log(1,this.isPostsLoading);
+        const response = await axios.get('https://jsonplaceholder.typicode.com/posts', {
+          params: {
+            _page: this.page,
+            _limit: this.limit
+          }
+        });
+        this.totalPages = Math.ceil(response.headers['x-total-count'] / this.limit);
+        this.posts = [...this.posts, ...response.data];
+      } catch (e) {
+        alert(e)
+      }
     }
   },
   mounted() {
     this.fetchPosts();
+
+    const callback = (entries, observer) => {
+      if (entries[0].isIntersecting && this.page < this.totalPages) {
+        this.loadMorePosts();
+      }
+    };
+
+    const options = {
+      rootMargin: "0px",
+      threshold: 1.0,
+    };
+
+    const observer = new IntersectionObserver(callback, options);
+    observer.observe(this.$refs.observer);
   },
   computed: {
     sortedPosts() {
@@ -152,14 +183,9 @@ export default {
     }
   },
   watch: {
-    page() {
+   /* page() {
       this.fetchPosts();
-    }
-    /*selectedSort(newValue) {
-      this.posts.sort((post1, post2) => {
-        return post1[newValue]?.localeCompare(post2[newValue])
-      })
-    },*/
+    }*/
   }
 }
 </script>
@@ -179,5 +205,10 @@ export default {
   margin: 15px 0;
   display: flex;
   justify-content: space-between;
+}
+
+.observer {
+  height: 30px;
+  background: gray;
 }
 </style>
