@@ -27,6 +27,11 @@ const router = createRouter({
       name: 'post',
       component: () => import('../views/SinglePost.vue'),
     },
+    {
+      path: '/posts-store',
+      name: 'post-store',
+      component: () => import('../views/PostPageWithStore.vue'),
+    },
   ],
 })
 
