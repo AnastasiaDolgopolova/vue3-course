@@ -4,6 +4,7 @@
     <my-input
         v-model="searchQuery"
         placeholder="Search ..."
+        v-focus
     />
     <!--      <input type="text" v-model.trim="modificatorValue">-->
     <!--      <my-button class="btn" @click="fetchPosts"> Get Posts </my-button>-->
@@ -29,7 +30,8 @@
     />
     <div v-else> Posts Loading </div>
 
-    <div ref="observer" class="observer"></div>
+    <!-- <div ref="observer" class="observer"></div> -->
+  <div v-intersection="loadMorePosts" class="observer"></div>
 
     <!--      <my-pagination v-model="page" :total-pages="totalPages" />-->
   </div>
@@ -119,19 +121,19 @@ export default {
   mounted() {
     this.fetchPosts();
 
-    const callback = (entries, observer) => {
-      if (entries[0].isIntersecting && this.page < this.totalPages) {
-        this.loadMorePosts();
-      }
-    };
+    // const callback = (entries, observer) => {
+    //   if (entries[0].isIntersecting && this.page < this.totalPages) {
+    //     this.loadMorePosts();
+    //   }
+    // };
 
-    const options = {
-      rootMargin: "0px",
-      threshold: 1.0,
-    };
+    // const options = {
+    //   rootMargin: "0px",
+    //   threshold: 1.0,
+    // };
 
-    const observer = new IntersectionObserver(callback, options);
-    observer.observe(this.$refs.observer);
+    // const observer = new IntersectionObserver(callback, options);
+    // observer.observe(this.$refs.observer);
   },
   computed: {
     sortedPosts() {
